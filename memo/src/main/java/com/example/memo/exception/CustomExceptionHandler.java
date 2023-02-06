@@ -13,6 +13,7 @@ public class CustomExceptionHandler {
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<CustomResponseBody> handleException(CustomException e) {
         // 어디서 무슨 에러가 발생했는지 로그
+        // ex) 한글자 이상 입력해주세요. : com.example.memo.service.MemoService.createMemo(MemoService.java:22)
         log.error("{} : {}", e.getStatusCode().getStatusMsg(), e.getStackTrace()[0]);
 
         String errorCode = e.getStatusCode().getStatusCode();

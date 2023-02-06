@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 // 상태 코드를 enum으로 관리
 @Getter
 public enum StatusCode {
-    // ex) 한글자 이상 입력해주세요. : com.example.memo.service.MemoService.createMemo(MemoService.java:22)
+
     OK(HttpStatus.OK, "0", "정상"),
 
     CREATE_MEMO_ERROR(HttpStatus.BAD_REQUEST, "100", "한글자 이상 입력해주세요.");
