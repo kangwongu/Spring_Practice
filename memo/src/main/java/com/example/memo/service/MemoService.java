@@ -18,7 +18,7 @@ public class MemoService {
     private final MemoRepository memoRepository;
 
     // 메모 생성
-    public void createMemo(MemoCreateRequestDto requestDto) {
+    public Long createMemo(MemoCreateRequestDto requestDto) {
         if (requestDto.getContent()==null || requestDto.getContent().isEmpty()) throw new CustomException(StatusCode.CREATE_MEMO_ERROR);
 
         Memo memo = Memo.builder()
@@ -27,6 +27,8 @@ public class MemoService {
                 .build();
 
         memoRepository.save(memo);
+
+        return memo.getId();
     }
 
 }

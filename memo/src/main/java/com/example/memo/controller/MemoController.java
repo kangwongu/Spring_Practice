@@ -28,8 +28,8 @@ public class MemoController {
     // 메모 생성
     @PostMapping("/api/memos")
     public ResponseEntity<CustomResponseBody> createMemo(@RequestBody MemoCreateRequestDto requestDto) {
-        memoService.createMemo(requestDto);
-        return new ResponseEntity<>(new CustomResponseBody(StatusCode.OK), HttpStatus.OK);
+        Long memoId = memoService.createMemo(requestDto);
+        return new ResponseEntity<>(new CustomResponseBody(memoId, StatusCode.OK), HttpStatus.OK);
     }
 
     // 메모 조회
