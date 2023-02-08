@@ -9,8 +9,8 @@ public enum StatusCode {
 
     OK(HttpStatus.OK, "0", "정상"),
 
-    WRITE_MEMO_ERROR(HttpStatus.BAD_REQUEST, "100", "내용은 한글자 이상 입력해주세요.");
-
+    WRITE_MEMO_ERROR(HttpStatus.BAD_REQUEST, "100", "내용은 한글자 이상 입력해주세요."),
+    NOT_EXISTING_MEMO(HttpStatus.BAD_REQUEST, "101", "해당 메모가 존재하지 않습니다.");
 
 
     // (상태코드, 임의로 정한 코드, 메세지) 형태

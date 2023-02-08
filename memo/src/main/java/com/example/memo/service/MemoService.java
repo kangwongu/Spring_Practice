@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.memo.exception.StatusCode.NOT_EXISTING_MEMO;
 import static com.example.memo.exception.StatusCode.WRITE_MEMO_ERROR;
 
 @Service
@@ -57,7 +58,7 @@ public class MemoService {
     public MemoUpdateResponseDto updateMemo(Long id, MemoUpdateRequestDto requestDto) {
         if (requestDto.getContents()==null || requestDto.getContents().isEmpty()) throw new CustomException(WRITE_MEMO_ERROR);
         Memo findMemo = memoRepository.findById(id).orElseThrow(
-                () -> new NullPointerException("해당 메모가 존재하지 않습니다.")
+                () -> new CustomException(NOT_EXISTING_MEMO)
         );
         // 수정
         findMemo.updateMemo(requestDto);
