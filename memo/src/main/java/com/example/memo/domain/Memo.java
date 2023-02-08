@@ -1,6 +1,7 @@
 package com.example.memo.domain;
 
 import com.example.memo.domain.timestamped.Timestamped;
+import com.example.memo.dto.request.MemoUpdateRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,5 +25,12 @@ public class Memo extends Timestamped {
     public Memo(String username, String content) {
         this.username = username;
         this.content = content;
+    }
+
+    //==비즈니스 메소드==//
+    // 메모 수정
+    public void updateMemo(MemoUpdateRequestDto requestDto) {
+        username = requestDto.getUsername();
+        content = requestDto.getContents();
     }
 }

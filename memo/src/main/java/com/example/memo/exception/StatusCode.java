@@ -9,7 +9,7 @@ public enum StatusCode {
 
     OK(HttpStatus.OK, "0", "정상"),
 
-    CREATE_MEMO_ERROR(HttpStatus.BAD_REQUEST, "100", "한글자 이상 입력해주세요.");
+    WRITE_MEMO_ERROR(HttpStatus.BAD_REQUEST, "100", "내용은 한글자 이상 입력해주세요.");
 
 
 
