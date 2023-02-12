@@ -1,0 +1,21 @@
+spring:
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: jdbc:h2:mem:db;MODE=MYSQL;
+    username: sa
+    password:
+
+  thymeleaf:
+    cache: false
+
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+  naver:
+    accessKey: "KYLAUEXJ4BCUErigMPMS"
+    secretKey: "rJATsm5fGM"
