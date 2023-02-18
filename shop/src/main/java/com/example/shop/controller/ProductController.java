@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class ProductController {
@@ -19,12 +21,18 @@ public class ProductController {
         return ResponseEntity.ok().body(response);
     }
 
-
     // 관심 상품 조회
-//    @GetMapping("/products")
-
+    @GetMapping("/products")
+    public ResponseEntity<List<ProductDto.ReadResponse>> getProducts() {
+        List<ProductDto.ReadResponse> response = productService.getProducts();
+        return ResponseEntity.ok().body(response);
+    }
 
     // 관심 상품 최저가 등록하기
-//    @PutMapping("/products/{id}")
-
+    @PutMapping("/products/{id}")
+    public ResponseEntity<ProductDto.UpdateResponse> updateProduct(@PathVariable Long id,
+                                                                   @RequestBody ProductDto.UpdateRequest requestDto) {
+        ProductDto.UpdateResponse response = productService.updateProduct(id, requestDto);
+        return ResponseEntity.ok().body(response);
+    }
 }

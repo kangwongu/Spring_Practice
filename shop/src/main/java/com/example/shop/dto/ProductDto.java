@@ -47,4 +47,42 @@ public class ProductDto {
             this.myPrice = myPrice;
         }
     }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class ReadResponse {
+        private Long id;
+        private String title;
+        private String link;
+        private String image;
+        private int lprice;
+        private int myPrice;
+
+        @Builder
+        public ReadResponse(Long id, String title, String link, String image, int lprice, int myPrice) {
+            this.id = id;
+            this.title = title;
+            this.link = link;
+            this.image = image;
+            this.lprice = lprice;
+            this.myPrice = myPrice;
+        }
+    }
+
+    @Getter
+    public static class UpdateRequest {
+        private int myPrice;
+    }
+
+    @Getter
+    public static class UpdateResponse {
+        private Long id;
+
+        @Builder
+        public UpdateResponse(Long id) {
+            this.id = id;
+        }
+    }
+
+
 }

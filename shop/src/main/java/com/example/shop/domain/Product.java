@@ -39,4 +39,9 @@ public class Product {
         this.lprice = lprice;
         this.myPrice = myPrice;
     }
+
+    //==비즈니스 메소드==//
+    public void updateMyPrice(int myPrice) {
+        this.myPrice = myPrice;
+    }
 }
