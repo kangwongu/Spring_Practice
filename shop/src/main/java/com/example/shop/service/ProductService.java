@@ -41,6 +41,7 @@ public class ProductService {
     }
 
     // 관심 상품 조회
+    @Transactional(readOnly = true)
     public List<ProductDto.ReadResponse> getProducts() {
         List<Product> find = productRepository.findAll();
         List<ProductDto.ReadResponse> response = new ArrayList<>();
