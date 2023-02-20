@@ -6,10 +6,13 @@ import com.example.shop.dto.UserDto;
 import com.example.shop.exception.UserException;
 import com.example.shop.exception.status.UserStatus;
 import com.example.shop.repository.UserRepository;
+import com.example.shop.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletResponse;
 
 @Service
 @Transactional
@@ -19,6 +22,7 @@ public class UserService {
     @Value("${spring.admin.token}")
     private String ADMIN_TOKEN;
     private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
 
     // 회원가입
     public void signUp(UserDto.SignUpRequest requestDto) {
@@ -48,7 +52,8 @@ public class UserService {
     }
 
     // 로그인
-    public void login(UserDto.LoginRequest requestDto) {
+    @Transactional(readOnly = true)
+    public void login(UserDto.LoginRequest requestDto, HttpServletResponse response) {
         String username = requestDto.getUsername();
         String password = requestDto.getPassword();
 
@@ -59,5 +64,8 @@ public class UserService {
         if (!findUser.getPassword().equals(password)) {
             throw new UserException(UserStatus.NOT_CORRECT_PASSWORD);
         }
+
+        // 응답 헤더에 JWT 토큰을 보내준다
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(findUser.getUsername(), findUser.getRole()));
     }
 }

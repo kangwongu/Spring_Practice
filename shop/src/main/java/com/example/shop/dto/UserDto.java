@@ -14,7 +14,7 @@ public class UserDto {
         private String adminToken = "";
     }
 
-    @Getter @Setter
+    @Getter
     public static class LoginRequest {
         private String username;
         private String password;

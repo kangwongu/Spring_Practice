@@ -4,11 +4,10 @@ import com.example.shop.dto.UserDto;
 import com.example.shop.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/api/user")
@@ -37,9 +36,10 @@ public class UserController {
     }
 
     // 로그인
+    @ResponseBody
     @PostMapping("/login")
-    public String login(@ModelAttribute UserDto.LoginRequest requestDto) {
-        userService.login(requestDto);
-        return "redirect:/api/shop";
+    public String login(@RequestBody UserDto.LoginRequest requestDto, HttpServletResponse response) {
+        userService.login(requestDto, response);
+        return "success";
     }
 }
