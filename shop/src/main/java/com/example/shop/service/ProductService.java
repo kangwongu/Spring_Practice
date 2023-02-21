@@ -89,22 +89,9 @@ public class ProductService {
 
             response = products.stream().map(product -> new ProductDto.ReadResponse(product)).collect(Collectors.toList());
             return response;
+        } else {
+            return null;
         }
-
-        List<Product> find = productRepository.findAll();
-        List<ProductDto.ReadResponse> response = new ArrayList<>();
-        // Entity -> Dto
-        for (Product product : find) {
-            response.add(ProductDto.ReadResponse.builder()
-                    .id(product.getId())
-                    .title(product.getTitle())
-                    .link(product.getLink())
-                    .image(product.getImage())
-                    .lprice(product.getLprice())
-                    .myPrice(product.getMyPrice())
-                    .build());
-        }
-        return response;
     }
 
     public ProductDto.UpdateResponse updateProduct(Long id, ProductDto.UpdateRequest requestDto) {
