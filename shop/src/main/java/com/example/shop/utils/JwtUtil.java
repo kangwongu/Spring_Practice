@@ -21,7 +21,7 @@ public class JwtUtil {
 
     // 인증 헤더
     public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String BEARER_PREFIX = "Bearer";
+    public static final String BEARER_PREFIX = "Bearer ";
     public static final String AUTHORIZATION_KEY = "auth";  // 시크릿 키
     private static final long TOKEN_TIME = 60 * 60 * 1000L; // 1시간
 

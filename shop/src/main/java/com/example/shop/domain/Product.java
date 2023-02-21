@@ -1,5 +1,6 @@
 package com.example.shop.domain;
 
+import com.example.shop.dto.ProductDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,6 +31,9 @@ public class Product {
     @Column(nullable = false)
     private int myPrice;
 
+    @Column(nullable = false)
+    private Long userId;
+
     @Builder
     public Product(Long id, String title, String image, String link, int lprice, int myPrice) {
         this.id = id;
@@ -39,6 +43,15 @@ public class Product {
         this.lprice = lprice;
         this.myPrice = myPrice;
     }
+
+//    public Product(ProductDto.R requestDto, Long userId) {
+//        this.title = requestDto.getTitle();
+//        this.image = requestDto.getImage();
+//        this.link = requestDto.getLink();
+//        this.lprice = requestDto.getLprice();
+//        this.myprice = 0;
+//        this.userId = userId;
+//    }
 
     //==비즈니스 메소드==//
     public void updateMyPrice(int myPrice) {

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -23,8 +24,8 @@ public class ProductController {
 
     // 관심 상품 조회
     @GetMapping("/products")
-    public ResponseEntity<List<ProductDto.ReadResponse>> getProducts() {
-        List<ProductDto.ReadResponse> response = productService.getProducts();
+    public ResponseEntity<List<ProductDto.ReadResponse>> getProducts(HttpServletRequest request) {
+        List<ProductDto.ReadResponse> response = productService.getProducts(request);
         return ResponseEntity.ok().body(response);
     }
 

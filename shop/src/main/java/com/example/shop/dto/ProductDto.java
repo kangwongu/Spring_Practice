@@ -67,6 +67,15 @@ public class ProductDto {
             this.lprice = lprice;
             this.myPrice = myPrice;
         }
+
+        public ReadResponse(Product product) {
+            id = product.getId();
+            title = product.getTitle();
+            link = product.getLink();
+            image = product.getImage();
+            lprice = product.getLprice();
+            myPrice = product.getMyPrice();
+        }
     }
 
     @Getter
