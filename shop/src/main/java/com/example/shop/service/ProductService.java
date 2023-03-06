@@ -14,11 +14,14 @@ import com.example.shop.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +36,22 @@ public class ProductService {
     private final JwtUtil jwtUtil;
 
     // 관심 상품 등록
-    public ProductDto.RegisterResponse registerProduct(ProductDto.RegisterRequest requestDto) {
+    public ProductDto.RegisterResponse registerProduct(ProductDto.RegisterRequest requestDto, HttpServletRequest request) {
+        String token = jwtUtil.resolveToken(request);
+        Claims claims = null;
+
+        if (token != null) {
+            if (jwtUtil.validateToken(token)) {
+                claims = jwtUtil.getUserInfoFromToken(token);
+            } else {
+                throw new UserException(UserStatus.INVALID_ACCESS_TOKEN);
+            }
+        }
+
+        User findUser = userRepository.findByUsername(claims.getSubject()).orElseThrow(
+                () -> new UserException(UserStatus.NOT_EXIST_USER)
+        );
+
         Product product = Product.builder()
                 .title(requestDto.getTitle())
                 .image(requestDto.getImage())
@@ -55,7 +73,11 @@ public class ProductService {
 
     // 관심 상품 조회
     @Transactional(readOnly = true)
-    public List<ProductDto.ReadResponse> getProducts(HttpServletRequest request) {
+    public Page<ProductDto.ReadResponse> getProducts(HttpServletRequest request, int page, int size, String sortBy, boolean isAsc) {
+        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;    // 정렬 방향
+        Sort sort = Sort.by(direction, sortBy); // 무엇을 기준으로 정렬할건지
+        Pageable pageable = PageRequest.of(page, size, sort);
+
         // Http 요청 헤더에서 토큰을 가져옮
         String token = jwtUtil.resolveToken(request);
         Claims claims;
@@ -78,23 +100,38 @@ public class ProductService {
             UserRoleEnum role = findUser.getRole();
             log.info("user role!!! = {}", role);
 
-            List<ProductDto.ReadResponse> response;
-            List<Product> products;
+            Page<ProductDto.ReadResponse> response;
+            Page<Product> products;
 
             if (role == UserRoleEnum.USER) {
-                products = productRepository.findAllByUserId(findUser.getId());
+                products = productRepository.findAllByUserId(findUser.getId(), pageable);
             } else {
-                products = productRepository.findAll();
+                products = productRepository.findAll(pageable);
             }
 
-            response = products.stream().map(product -> new ProductDto.ReadResponse(product)).collect(Collectors.toList());
+            response = products.map(product -> new ProductDto.ReadResponse(product));
             return response;
         } else {
             return null;
         }
     }
 
-    public ProductDto.UpdateResponse updateProduct(Long id, ProductDto.UpdateRequest requestDto) {
+    public ProductDto.UpdateResponse updateProduct(Long id, ProductDto.UpdateRequest requestDto, HttpServletRequest request) {
+        String token = jwtUtil.resolveToken(request);
+        Claims claims = null;
+
+        if (token != null) {
+            if (jwtUtil.validateToken(token)){
+                claims = jwtUtil.getUserInfoFromToken(token);
+            } else {
+                throw new UserException(UserStatus.INVALID_ACCESS_TOKEN);
+            }
+        }
+
+        User findUser = userRepository.findByUsername(claims.getSubject()).orElseThrow(
+                () -> new UserException(UserStatus.INVALID_ACCESS_TOKEN)
+        );
+
         Product findProduct = productRepository.findById(id).orElseThrow(
                 () -> new ProductException(ProductStatus.NOT_EXIST_PRODUCT)
         );

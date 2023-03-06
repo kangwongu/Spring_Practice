@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "users")
 @Getter
@@ -14,6 +16,9 @@ public class User {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToMany
+    List<Folder> folders = new ArrayList<>();
 
     @Column(nullable = false, unique = true)
     private String username;

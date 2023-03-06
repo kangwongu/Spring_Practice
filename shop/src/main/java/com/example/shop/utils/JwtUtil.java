@@ -42,6 +42,7 @@ public class JwtUtil {
         // HTTP 요청에서 토큰 가져옮
         String token = request.getHeader(AUTHORIZATION_HEADER);
         if (StringUtils.hasText(token) && token.startsWith(BEARER_PREFIX)) {
+            log.info("token = {}", token.substring(7));
             return token.substring(7);
         }
         return null;
@@ -63,7 +64,7 @@ public class JwtUtil {
     // JWT 토큰 검증
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJwt(token);
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
@@ -79,6 +80,6 @@ public class JwtUtil {
 
     // 토큰에서 사용자 정보 가져오기
     public Claims getUserInfoFromToken(String token) {
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJwt(token).getBody();
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 }
