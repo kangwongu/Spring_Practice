@@ -1,5 +1,6 @@
 package com.example.shop.dto;
 
+import com.example.shop.domain.Folder;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,6 +23,20 @@ public class FolderDto {
         @Builder
         public AddResponse(String folderName) {
             this.folderName = folderName;
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class ReadResponse {
+        private Long id;
+        private Long userId;
+        private String name;
+
+        public ReadResponse(Folder folder) {
+            id = folder.getId();
+            userId = folder.getUser().getId();
+            name = folder.getName();
         }
     }
 }

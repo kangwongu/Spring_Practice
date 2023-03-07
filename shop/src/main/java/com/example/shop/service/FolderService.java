@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -60,6 +61,28 @@ public class FolderService {
                         .build());
             }
             return response;
+        } else {
+            return null;
+        }
+    }
+
+    public List<FolderDto.ReadResponse> getFolders(HttpServletRequest request) {
+        String token = jwtUtil.resolveToken(request);
+        Claims claims;
+
+        if (token != null) {
+            if (jwtUtil.validateToken(token)) {
+                claims = jwtUtil.getUserInfoFromToken(token);
+            } else {
+                throw new UserException(UserStatus.INVALID_ACCESS_TOKEN);
+            }
+
+            User findUser = userRepository.findByUsername(claims.getSubject()).orElseThrow(
+                    () -> new UserException(UserStatus.NOT_EXIST_USER)
+            );
+            List<Folder> folders = findUser.getFolders();
+
+            return folders.stream().map(folder -> new FolderDto.ReadResponse(folder)).collect(Collectors.toList());
         } else {
             return null;
         }
