@@ -1,13 +1,17 @@
 package com.example.shop.service;
 
+import com.example.shop.domain.Folder;
 import com.example.shop.domain.Product;
 import com.example.shop.domain.User;
 import com.example.shop.domain.UserRoleEnum;
 import com.example.shop.dto.ProductDto;
+import com.example.shop.exception.FolderException;
 import com.example.shop.exception.ProductException;
 import com.example.shop.exception.UserException;
+import com.example.shop.exception.status.FolderStatus;
 import com.example.shop.exception.status.ProductStatus;
 import com.example.shop.exception.status.UserStatus;
+import com.example.shop.repository.FolderRepository;
 import com.example.shop.repository.ProductRepository;
 import com.example.shop.repository.UserRepository;
 import com.example.shop.utils.JwtUtil;
@@ -22,8 +26,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -33,6 +35,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
+    private final FolderRepository folderRepository;
     private final JwtUtil jwtUtil;
 
     // 관심 상품 등록
@@ -46,29 +49,31 @@ public class ProductService {
             } else {
                 throw new UserException(UserStatus.INVALID_ACCESS_TOKEN);
             }
+
+            User findUser = userRepository.findByUsername(claims.getSubject()).orElseThrow(
+                    () -> new UserException(UserStatus.NOT_EXIST_USER)
+            );
+
+            Product product = Product.builder()
+                    .title(requestDto.getTitle())
+                    .image(requestDto.getImage())
+                    .link(requestDto.getLink())
+                    .lprice(requestDto.getLprice())
+                    .build();
+
+            Product saveProduct = productRepository.save(product);
+
+            return ProductDto.RegisterResponse.builder()
+                    .id(saveProduct.getId())
+                    .title(saveProduct.getTitle())
+                    .link(saveProduct.getLink())
+                    .image(saveProduct.getImage())
+                    .lprice(saveProduct.getLprice())
+                    .myPrice(saveProduct.getMyPrice())
+                    .build();
+        } else {
+            return null;
         }
-
-        User findUser = userRepository.findByUsername(claims.getSubject()).orElseThrow(
-                () -> new UserException(UserStatus.NOT_EXIST_USER)
-        );
-
-        Product product = Product.builder()
-                .title(requestDto.getTitle())
-                .image(requestDto.getImage())
-                .link(requestDto.getLink())
-                .lprice(requestDto.getLprice())
-                .build();
-
-        Product saveProduct = productRepository.save(product);
-
-        return ProductDto.RegisterResponse.builder()
-                .id(saveProduct.getId())
-                .title(saveProduct.getTitle())
-                .link(saveProduct.getLink())
-                .image(saveProduct.getImage())
-                .lprice(saveProduct.getLprice())
-                .myPrice(saveProduct.getMyPrice())
-                .build();
     }
 
     // 관심 상품 조회
@@ -118,7 +123,7 @@ public class ProductService {
 
     public ProductDto.UpdateResponse updateProduct(Long id, ProductDto.UpdateRequest requestDto, HttpServletRequest request) {
         String token = jwtUtil.resolveToken(request);
-        Claims claims = null;
+        Claims claims;
 
         if (token != null) {
             if (jwtUtil.validateToken(token)){
@@ -126,18 +131,59 @@ public class ProductService {
             } else {
                 throw new UserException(UserStatus.INVALID_ACCESS_TOKEN);
             }
+
+            User findUser = userRepository.findByUsername(claims.getSubject()).orElseThrow(
+                    () -> new UserException(UserStatus.INVALID_ACCESS_TOKEN)
+            );
+
+            Product findProduct = productRepository.findById(id).orElseThrow(
+                    () -> new ProductException(ProductStatus.NOT_EXIST_PRODUCT)
+            );
+
+            findProduct.updateMyPrice(requestDto.getMyPrice());
+            return ProductDto.UpdateResponse.builder()
+                    .id(findProduct.getId()).build();
+        } else {
+            return null;
         }
+    }
 
-        User findUser = userRepository.findByUsername(claims.getSubject()).orElseThrow(
-                () -> new UserException(UserStatus.INVALID_ACCESS_TOKEN)
-        );
+    public ProductDto.AddFolderResponse addFolder(Long productId, Long folderId, HttpServletRequest request) {
+        String token = jwtUtil.resolveToken(request);
+        Claims claims;
 
-        Product findProduct = productRepository.findById(id).orElseThrow(
-                () -> new ProductException(ProductStatus.NOT_EXIST_PRODUCT)
-        );
+        if (token != null) {
+            if (jwtUtil.validateToken(token)) {
+                claims = jwtUtil.getUserInfoFromToken(token);
+            } else {
+                throw new UserException(UserStatus.INVALID_ACCESS_TOKEN);
+            }
 
-        findProduct.updateMyPrice(requestDto.getMyPrice());
-        return ProductDto.UpdateResponse.builder()
-                .id(findProduct.getId()).build();
+            User findUser = userRepository.findByUsername(claims.getSubject()).orElseThrow(
+                    () -> new UserException(UserStatus.INVALID_ACCESS_TOKEN)
+            );
+
+            Product findProduct = productRepository.findById(productId).orElseThrow(
+                    () -> new ProductException(ProductStatus.NOT_EXIST_PRODUCT)
+            );
+
+            Folder findFolder = folderRepository.findById(folderId).orElseThrow(
+                    () -> new FolderException(FolderStatus.NOT_EXIST_FOLDER)
+            );
+
+            if (!findProduct.getUserId().equals(findUser.getId())) {
+                throw new UserException(UserStatus.INCORRECT_MY_PRODUCT);
+            }
+
+            if (!findFolder.getUser().getId().equals(findUser.getId())) {
+                throw new UserException(UserStatus.INCORRECT_MY_FOLDER);
+            }
+
+            findProduct.addFolder(findFolder);
+
+            return new ProductDto.AddFolderResponse(findProduct.getId());
+        } else {
+            return null;
+        }
     }
 }

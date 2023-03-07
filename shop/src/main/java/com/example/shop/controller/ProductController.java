@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,7 +30,7 @@ public class ProductController {
                                                                      @RequestParam String sortBy,
                                                                      @RequestParam boolean isAsc,
                                                                      HttpServletRequest request) {
-        Page<ProductDto.ReadResponse> response = productService.getProducts(request, page-1, size, sortBy, isAsc);
+        Page<ProductDto.ReadResponse> response = productService.getProducts(request, page - 1, size, sortBy, isAsc);
         return ResponseEntity.ok().body(response);
     }
 
@@ -41,6 +40,15 @@ public class ProductController {
                                                                    @RequestBody ProductDto.UpdateRequest requestDto,
                                                                    HttpServletRequest request) {
         ProductDto.UpdateResponse response = productService.updateProduct(id, requestDto, request);
+        return ResponseEntity.ok().body(response);
+    }
+
+    // 관심 상품에 폴더 추가하기
+    @PostMapping("/products/{productId}/folder")
+    public ResponseEntity<ProductDto.AddFolderResponse> addFolder(@PathVariable Long productId,
+                                                                  @RequestParam Long folderId,
+                                                                  HttpServletRequest request) {
+        ProductDto.AddFolderResponse response = productService.addFolder(productId, folderId, request);
         return ResponseEntity.ok().body(response);
     }
 }

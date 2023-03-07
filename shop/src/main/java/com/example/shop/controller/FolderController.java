@@ -23,4 +23,10 @@ public class FolderController {
         List<FolderDto.AddResponse> response = folderService.addFolders(requestDto, request);
         return ResponseEntity.ok().body(response);
     }
+
+    @GetMapping("/folders")
+    public ResponseEntity<List<FolderDto.ReadResponse>> getFolders(HttpServletRequest request) {
+        List<FolderDto.ReadResponse> response = folderService.getFolders(request);
+        return ResponseEntity.ok().body(response);
+    }
 }

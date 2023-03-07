@@ -93,5 +93,14 @@ public class ProductDto {
         }
     }
 
+    @Getter
+    public static class AddFolderResponse {
+        private Long productId;
+
+        public AddFolderResponse(Long productId) {
+            this.productId = productId;
+        }
+    }
+
 
 }
