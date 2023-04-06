@@ -3,6 +3,10 @@ package study.datajpa.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.dto.MemberDto;
 import study.datajpa.entity.Member;
@@ -134,5 +138,32 @@ class MemberRepositoryTest {
 
         List<Member> aaa = memberRepository.findListByUsername("AAA");
         Member member = memberRepository.findMemberByUsername("AAA");
+    }
+
+    @Test
+    public void paging() {
+        memberRepository.save(new Member("member1", 10));
+        memberRepository.save(new Member("member2", 10));
+        memberRepository.save(new Member("member3", 10));
+        memberRepository.save(new Member("member4", 10));
+        memberRepository.save(new Member("member5", 10));
+        memberRepository.save(new Member("member6", 10));
+
+        int age = 10;
+        int offset = 0;
+        int limit = 3;
+
+        PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "username"));
+
+        Page<Member> page = memberRepository.findByAge(age, pageRequest);
+
+        List<Member> content = page.getContent();
+
+        assertThat(content.size()).isEqualTo(3);    // 페이징이 적용된 컨텐츠
+        assertThat(page.getTotalElements()).isEqualTo(6);   // 총 데이터
+        assertThat(page.getNumber()).isEqualTo(0);  // 페이지 번호
+        assertThat(page.getTotalPages()).isEqualTo(2);  // 페이지 개수
+        assertThat(page.isFirst()).isTrue(); // 첫번째 페이지인지?
+        assertThat(page.hasNext()).isTrue();    // 다음 페이지가 있는지?
     }
 }
