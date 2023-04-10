@@ -190,4 +190,33 @@ class MemberRepositoryTest {
 
         assertThat(resultCount).isEqualTo(3);
     }
+
+    // 페치조인
+    @Test
+    public void findMemberLazy() {
+        // member1 -> teamA
+        // member2 -> teamB
+
+        Team teamA = new Team("teamA");
+        Team teamB = new Team("teamB");
+        teamRepository.save(teamA);
+        teamRepository.save(teamB);
+
+        Member member1 = new Member("member1", 10, teamA);
+        Member member2 = new Member("member2", 20, teamB);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+        
+        em.flush();
+        em.clear();
+
+//        List<Member> members = memberRepository.findAll();            // N+1 문제
+//        List<Member> members = memberRepository.findMemberFetchJoin();  // 페치조인으로 N+1 해결
+        List<Member> members = memberRepository.findAll();  // @EntityGraph를 사용한 페치조인으로 N+1 해결
+
+        for (Member member : members) {
+            System.out.println("member.getUsername() = " + member.getUsername());
+            System.out.println("member.getTeam() = " + member.getTeam().getName()); // LAZY 초기화
+        }
+    }
 }
