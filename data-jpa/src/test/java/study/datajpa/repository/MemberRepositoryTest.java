@@ -12,6 +12,8 @@ import study.datajpa.dto.MemberDto;
 import study.datajpa.entity.Member;
 import study.datajpa.entity.Team;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,6 +26,8 @@ class MemberRepositoryTest {
 
     @Autowired MemberRepository memberRepository;
     @Autowired TeamRepository teamRepository;
+    @PersistenceContext
+    EntityManager em;
 
     @Test
     public void testMember() {
@@ -165,5 +169,25 @@ class MemberRepositoryTest {
         assertThat(page.getTotalPages()).isEqualTo(2);  // 페이지 개수
         assertThat(page.isFirst()).isTrue(); // 첫번째 페이지인지?
         assertThat(page.hasNext()).isTrue();    // 다음 페이지가 있는지?
+    }
+
+    // 벌크성 수정 쿼리
+    @Test
+    public void bulkUpdate() {
+        memberRepository.save(new Member("member1", 10));
+        memberRepository.save(new Member("member2", 19));
+        memberRepository.save(new Member("member3", 20));
+        memberRepository.save(new Member("member4", 30));
+        memberRepository.save(new Member("member5", 40));
+
+        // 20세 이상은 나이를 +1
+        int resultCount = memberRepository.bulkAgePlus(20);
+//        em.flush();
+//        em.clear(); // 영속성 컨텍스트를 비움
+
+        Member member5 = memberRepository.findMemberByUsername("member5");
+        System.out.println("member5 = " + member5.getAge());
+
+        assertThat(resultCount).isEqualTo(3);
     }
 }
