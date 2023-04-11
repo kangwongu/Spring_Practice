@@ -219,4 +219,29 @@ class MemberRepositoryTest {
             System.out.println("member.getTeam() = " + member.getTeam().getName()); // LAZY 초기화
         }
     }
+
+    // JPA hint
+    @Test
+    public void queryHint() {
+        Member member = new Member("member1", 10);
+        memberRepository.save(member);
+        em.flush();
+        em.clear();
+
+        Member findMember = memberRepository.findReadOnlyByUsername("member1");
+        findMember.setUsername("member2");  // 변경감지 안 함
+
+        em.flush();
+    }
+
+    // JPA Lock
+    @Test
+    public void lock() {
+        Member member = new Member("member1", 10);
+        memberRepository.save(member);
+        em.flush();
+        em.clear();
+
+        List<Member> result = memberRepository.findLockByUsername("member1");
+    }
 }
