@@ -1,5 +1,6 @@
 package com.example.mysql.domain.member.entity;
 
+import com.example.mysql.domain.member.dto.MemberDto;
 import com.example.mysql.domain.member.entity.timestamp.Timestamp;
 import lombok.AccessLevel;
 import lombok.Builder;

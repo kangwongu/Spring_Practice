@@ -6,21 +6,19 @@ import com.example.mysql.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-
 @Service
 @RequiredArgsConstructor
-public class MemberWriteService {
-
+public class MemberReadService {
     private final MemberRepository memberRepository;
 
-    // 저장
-    public Member register(MemberDto.RegisterRequest requestDto) {
-        Member member = Member.builder()
-                .nickname(requestDto.getNickname())
-                .email(requestDto.getEmail())
-                .birthday(requestDto.getBirthday())
-                .build();
+    // 조회
+    public MemberDto.Response getMember(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow();
 
-        return memberRepository.save(member);
+        return toDto(member);
+    }
+
+    public MemberDto.Response toDto(Member member) {
+        return new MemberDto.Response(member.getId(), member.getEmail(), member.getNickname(), member.getBirthday());
     }
 }
