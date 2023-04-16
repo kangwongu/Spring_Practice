@@ -1,6 +1,5 @@
 package com.example.mysql.domain.member.entity;
 
-import com.example.mysql.domain.member.dto.MemberDto;
 import com.example.mysql.domain.member.entity.timestamp.Timestamp;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -41,7 +40,14 @@ public class Member extends Timestamp {
         this.nickname = Objects.requireNonNull(nickname);
     }
 
-    void validateNickname(String nickname) {
+    private void validateNickname(String nickname) {
         Assert.isTrue(nickname.length() <= NAME_MAX_LENGTH, "닉네임 최대 길이를 초과했어요");
+    }
+
+    // 닉네임 변경
+    public void changeNickname(String nickname) {
+        Objects.requireNonNull(nickname, "닉네임은 공백일 수 없습니다.");   // null 체크
+        validateNickname(nickname);
+        this.nickname = nickname;
     }
 }
