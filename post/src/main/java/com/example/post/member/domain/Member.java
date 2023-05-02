@@ -1,6 +1,7 @@
-package com.example.post.domain;
+package com.example.post.member.domain;
 
-import com.example.post.domain.timestamp.Timestamp;
+import com.example.post.common.timestamp.Timestamp;
+import com.example.post.post.domain.Post;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,5 +35,15 @@ public class Member extends Timestamp {
         this.age = age;
         this.email = email;
         this.password = password;
+    }
+
+    public static Member createMember(String email, String password, String username, Integer age) {
+        Member member = Member.builder()
+                .email(email)
+                .password(password)
+                .username(username)
+                .age(age)
+                .build();
+        return member;
     }
 }

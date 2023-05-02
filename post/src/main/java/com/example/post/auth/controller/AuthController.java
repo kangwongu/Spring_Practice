@@ -1,7 +1,7 @@
-package com.example.post.controller;
+package com.example.post.auth.controller;
 
-import com.example.post.dto.RegisterDto;
-import com.example.post.service.AuthService;
+import com.example.post.auth.dto.RegisterDto;
+import com.example.post.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

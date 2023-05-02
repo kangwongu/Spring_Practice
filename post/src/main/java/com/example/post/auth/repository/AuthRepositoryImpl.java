@@ -1,9 +1,11 @@
-package com.example.post.repository;
+package com.example.post.auth.repository;
 
-import com.example.post.domain.Member;
-import com.example.post.service.AuthRepository;
+import com.example.post.member.domain.Member;
+import com.example.post.auth.service.AuthRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -14,5 +16,10 @@ public class AuthRepositoryImpl implements AuthRepository {
     @Override
     public void registerMember(Member member) {
         authJpaRepository.save(member);
+    }
+
+    @Override
+    public Optional<Member> findByEmail(String email) {
+        return authJpaRepository.findByEmail(email);
     }
 }

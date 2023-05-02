@@ -1,4 +1,4 @@
-package com.example.post.domain.timestamp;
+package com.example.post.common.timestamp;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

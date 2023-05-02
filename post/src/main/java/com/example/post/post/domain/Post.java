@@ -1,6 +1,7 @@
-package com.example.post.domain;
+package com.example.post.post.domain;
 
-import com.example.post.domain.timestamp.Timestamp;
+import com.example.post.common.timestamp.Timestamp;
+import com.example.post.member.domain.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

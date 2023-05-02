@@ -1,4 +1,4 @@
-package com.example.post.dto;
+package com.example.post.auth.dto;
 
 import lombok.Getter;
 
