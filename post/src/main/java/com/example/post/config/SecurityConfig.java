@@ -35,6 +35,7 @@ public class SecurityConfig {
 
         http.authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
+                .antMatchers("/post/list").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()

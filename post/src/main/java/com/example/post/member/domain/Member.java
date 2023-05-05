@@ -16,7 +16,7 @@ import java.util.List;
 public class Member extends Timestamp {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Long memberId;
 
     private String username;
 
