@@ -1,12 +1,17 @@
 package com.example.productorderservice;
 
+import lombok.*;
 import org.springframework.util.Assert;
 
-class AddProductRequest {
+@Getter @Setter
+public class AddProductRequest {
 
-    private final String productName;
-    private final int price;
-    private final DiscountPolicy discountPolicy;
+    private String productName;
+    private int price;
+    private DiscountPolicy discountPolicy;
+
+    public AddProductRequest() {
+    }
 
     public AddProductRequest(final String productName, final int price, final DiscountPolicy discountPolicy) {
         Assert.hasText(productName, "상품명은 필수입니다.");
