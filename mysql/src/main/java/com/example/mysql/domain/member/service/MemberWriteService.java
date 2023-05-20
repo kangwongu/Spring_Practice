@@ -23,4 +23,10 @@ public class MemberWriteService {
 
         return memberRepository.save(member);
     }
+
+    public void changeNickname(Long memberId, String nickname) {
+        Member member = memberRepository.findById(memberId).orElseThrow();
+        member.changeNickname(nickname);
+
+    }
 }

@@ -26,4 +26,11 @@ public class MemberController {
     public MemberDto.Response getMember(@PathVariable Long memberId) {
         return memberReadService.getMember(memberId);
     }
+
+    // 수정
+    @PostMapping("/{id}/name")
+    public MemberDto.Response changeNickname(@PathVariable Long memberId, @RequestBody String nickname) {
+        memberWriteService.changeNickname(memberId, nickname);
+        return memberReadService.getMember(memberId);
+    }
 }
