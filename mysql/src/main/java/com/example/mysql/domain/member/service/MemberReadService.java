@@ -25,6 +25,11 @@ public class MemberReadService {
         return toDto(member);
     }
 
+    public List<MemberDto.Response> getMembers(List<Long> ids) {
+        List<Member> members = memberRepository.findAllByIdIn(ids);
+        return members.stream().map(this::toDto).collect(Collectors.toList());
+    }
+
     public List<MemberNicknameHistoryDto.Res> getNicknameHistories(Long memberId) {
         return memberNicknameHistoryRepository
                 .findAllByMemberId(memberId)
@@ -45,4 +50,6 @@ public class MemberReadService {
                 .createAt(history.getCreatedAt())
                 .build();
     }
+
+
 }
