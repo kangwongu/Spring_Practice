@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    @Query("select new com.example.mysql.domain.post.dto.PostDto.DailyPostCountResponse(p.memberId, p.createdDate, count(*)) " +
+    @Query("select new com.example.mysql.domain.post.dto.PostDto$DailyPostCountResponse(p.memberId, p.createdDate, count(*)) " +
             "from Post p " +
             "where p.memberId = :memberId " +
             "and p.createdDate between :firstDate and :lastDate " +
