@@ -1,11 +1,13 @@
 package com.example.mysql.domain.post;
 
 import com.example.mysql.domain.post.entity.Post;
+import com.example.mysql.domain.post.repository.PostBulkRepository;
 import com.example.mysql.domain.post.repository.PostRepository;
 import com.example.mysql.utils.PostFixtureFactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.util.StopWatch;
 
 import java.time.LocalDate;
@@ -14,17 +16,20 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @SpringBootTest
+@ComponentScan(value = {"com.example.mysql.domain.post.repository"})
 public class PostBulkInsertTest {
 
     @Autowired
     private PostRepository postRepository;
+    @Autowired
+    private PostBulkRepository postBulkRepository;
 
     @Test
     public void bulkInsert() {
         var easyRandom = PostFixtureFactory.get(
-                2L,
-                LocalDate.of(2022, 1, 1),
-                LocalDate.of(2022,2,1)
+                3L,
+                LocalDate.of(2020, 1, 1),
+                LocalDate.of(2023,6,1)
         );
 
         StopWatch stopWatch = new StopWatch();
@@ -40,7 +45,7 @@ public class PostBulkInsertTest {
 
         StopWatch queryStopWatch = new StopWatch();
         queryStopWatch.start();
-        postRepository.saveAll(posts);
+        postBulkRepository.saveAllByBulk(posts);
 
         queryStopWatch.stop();
         System.out.println("쿼리 실행 시간 = " + queryStopWatch.getTotalTimeSeconds());
