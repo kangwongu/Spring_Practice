@@ -2,7 +2,7 @@ package com.example.mysql.domain.post;
 
 import com.example.mysql.domain.post.entity.Post;
 import com.example.mysql.domain.post.repository.PostBulkRepository;
-import com.example.mysql.domain.post.repository.PostRepository;
+import com.example.mysql.infrastructure.repository.post.PostJpaRepository;
 import com.example.mysql.utils.PostFixtureFactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import java.util.stream.IntStream;
 public class PostBulkInsertTest {
 
     @Autowired
-    private PostRepository postRepository;
+    private PostJpaRepository postRepository;
     @Autowired
     private PostBulkRepository postBulkRepository;
 

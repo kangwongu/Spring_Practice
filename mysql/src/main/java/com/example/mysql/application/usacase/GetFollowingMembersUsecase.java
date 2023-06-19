@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class GetFollowingMembersUsacase {
+public class GetFollowingMembersUsecase {
 
     private final MemberReadService memberReadService;
     private final FollowReadService followReadService;
