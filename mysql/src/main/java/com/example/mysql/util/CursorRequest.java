@@ -12,6 +12,7 @@ public class CursorRequest {
     private Long key;
     private Long size;
 
+    // 다음 키
     public CursorRequest next(Long key) {
         return new CursorRequest(key, size);
     }

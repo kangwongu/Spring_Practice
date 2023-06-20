@@ -23,7 +23,7 @@ public class PostJpaRepositoryCustomImpl implements PostJpaRepositoryCustom {
                 .selectFrom(post)
                 .where(
                         post.memberId.eq(memberId),
-                        post.id.gt(key)
+                        post.id.lt(key)
                 )
                 .orderBy(post.id.desc())
                 .limit(size)
