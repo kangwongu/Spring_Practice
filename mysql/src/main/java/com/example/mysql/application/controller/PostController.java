@@ -1,5 +1,6 @@
 package com.example.mysql.application.controller;
 
+import com.example.mysql.application.usacase.GetTimelinePostsUsecase;
 import com.example.mysql.domain.post.dto.PostDto;
 import com.example.mysql.domain.post.entity.Post;
 import com.example.mysql.domain.post.service.PostReadService;
@@ -22,6 +23,7 @@ public class PostController {
 
     private final PostReadService postReadService;
     private final PostWriteService postWriteService;
+    private final GetTimelinePostsUsecase getTimelinePostsUsecase;
 
     // 등록
     @PostMapping("")
@@ -50,4 +52,9 @@ public class PostController {
         return postReadService.getPosts(memberId, cursorRequest);
     }
 
+    @GetMapping("/member/{memberId}/timeline")
+    public PageCursor<Post> getTimeline(@PathVariable Long memberId,
+                                             @ModelAttribute CursorRequest cursorRequest) {
+        return getTimelinePostsUsecase.execute(memberId, cursorRequest);
+    }
 }

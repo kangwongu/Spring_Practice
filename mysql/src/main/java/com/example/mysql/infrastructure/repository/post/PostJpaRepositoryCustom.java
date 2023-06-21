@@ -8,4 +8,8 @@ public interface PostJpaRepositoryCustom {
     List<Post> findAllByLessThanIdAndMemberIdOrderByIdDesc(Long key, Long memberId, Long size);
 
     List<Post> findAllByMemberIdOrderByIdDesc(Long memberId, Long size);
+
+    List<Post> findAllByLessThanIdAndInMemberIdOrderByIdDesc(Long key, List<Long> memberIds, Long size);
+
+    List<Post> findAllByInMemberIdOrderByIdDesc(List<Long> memberIds, Long size);
 }

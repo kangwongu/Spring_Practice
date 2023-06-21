@@ -42,4 +42,37 @@ public class PostJpaRepositoryCustomImpl implements PostJpaRepositoryCustom {
                 .fetch();
     }
 
+    @Override
+    public List<Post> findAllByLessThanIdAndInMemberIdOrderByIdDesc(Long key, List<Long> memberIds, Long size) {
+        if (memberIds.isEmpty()) {
+            return List.of();
+        }
+
+        return queryFactory
+                .selectFrom(post)
+                .where(
+                        post.memberId.in(memberIds),
+                        post.id.lt(key)
+                )
+                .orderBy(post.id.desc())
+                .limit(size)
+                .fetch();
+    }
+
+    @Override
+    public List<Post> findAllByInMemberIdOrderByIdDesc(List<Long> memberIds, Long size) {
+        if (memberIds.isEmpty()) {
+            return List.of();
+        }
+
+        return queryFactory
+                .selectFrom(post)
+                .where(
+                        post.memberId.in(memberIds)
+                )
+                .orderBy(post.id.desc())
+                .limit(size)
+                .fetch();
+    }
+
 }

@@ -37,4 +37,14 @@ public class PostRepositoryImpl implements PostRepository {
     public List<Post> findAllByMemberIdOrderByIdDesc(Long memberId, Long size) {
         return postJpaRepository.findAllByMemberIdOrderByIdDesc(memberId, size);
     }
+
+    @Override
+    public List<Post> findAllByLessThanIdAndInMemberIdOrderByIdDesc(Long key, List<Long> memberIds, Long size) {
+        return postJpaRepository.findAllByLessThanIdAndInMemberIdOrderByIdDesc(key, memberIds, size);
+    }
+
+    @Override
+    public List<Post> findAllByInMemberIdOrderByIdDesc(List<Long> memberIds, Long size) {
+        return postJpaRepository.findAllByInMemberIdOrderByIdDesc(memberIds, size);
+    }
 }
