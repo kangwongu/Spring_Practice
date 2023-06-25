@@ -12,7 +12,7 @@ import org.springframework.data.repository.query.Param;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface PostJpaRepository extends JpaRepository<Post, Long>, PostJpaRepositoryCustom {
+public interface PostJpaRepository extends JpaRepository<Post, Long> {
 
     @Query("select new com.example.mysql.domain.post.dto.PostDto$DailyPostCountResponse(p.memberId, p.createdDate, count(*)) " +
             "from Post p " +

@@ -6,7 +6,6 @@ import com.example.mysql.domain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -17,6 +16,7 @@ import java.util.List;
 public class PostRepositoryImpl implements PostRepository {
 
     private final PostJpaRepository postJpaRepository;
+    private final PostJpaRepositoryCustom postJpaRepositoryCustom;
 
     @Override
     public List<PostDto.DailyPostCountResponse> obtainGroupByCreatedDate(Long memberId, LocalDate firstDate, LocalDate lastDate) {
@@ -30,21 +30,21 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public List<Post> findAllByLessThanIdAndMemberIdOrderByIdDesc(Long key, Long memberId, Long size) {
-        return postJpaRepository.findAllByLessThanIdAndMemberIdOrderByIdDesc(key, memberId, size);
+        return postJpaRepositoryCustom.findAllByLessThanIdAndMemberIdOrderByIdDesc(key, memberId, size);
     }
 
     @Override
     public List<Post> findAllByMemberIdOrderByIdDesc(Long memberId, Long size) {
-        return postJpaRepository.findAllByMemberIdOrderByIdDesc(memberId, size);
+        return postJpaRepositoryCustom.findAllByMemberIdOrderByIdDesc(memberId, size);
     }
 
     @Override
     public List<Post> findAllByLessThanIdAndInMemberIdOrderByIdDesc(Long key, List<Long> memberIds, Long size) {
-        return postJpaRepository.findAllByLessThanIdAndInMemberIdOrderByIdDesc(key, memberIds, size);
+        return postJpaRepositoryCustom.findAllByLessThanIdAndInMemberIdOrderByIdDesc(key, memberIds, size);
     }
 
     @Override
     public List<Post> findAllByInMemberIdOrderByIdDesc(List<Long> memberIds, Long size) {
-        return postJpaRepository.findAllByInMemberIdOrderByIdDesc(memberIds, size);
+        return postJpaRepositoryCustom.findAllByInMemberIdOrderByIdDesc(memberIds, size);
     }
 }
