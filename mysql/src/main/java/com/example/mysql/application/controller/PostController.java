@@ -1,5 +1,6 @@
 package com.example.mysql.application.controller;
 
+import com.example.mysql.application.usacase.CreatePostUsecase;
 import com.example.mysql.application.usacase.GetTimelinePostsUsecase;
 import com.example.mysql.domain.post.dto.PostDto;
 import com.example.mysql.domain.post.entity.Post;
@@ -24,11 +25,12 @@ public class PostController {
     private final PostReadService postReadService;
     private final PostWriteService postWriteService;
     private final GetTimelinePostsUsecase getTimelinePostsUsecase;
+    private final CreatePostUsecase createPostUsecase;
 
     // 등록
     @PostMapping("")
     public Long create(@RequestBody PostDto.CreateRequest request) {
-        return postWriteService.create(request);
+        return createPostUsecase.execute(request);
     }
 
     // 일자별 작성 수 조회
