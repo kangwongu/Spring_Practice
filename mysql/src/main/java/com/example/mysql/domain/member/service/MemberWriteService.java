@@ -7,6 +7,7 @@ import com.example.mysql.domain.member.repository.MemberNicknameHistoryRepositor
 import com.example.mysql.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
@@ -17,6 +18,7 @@ public class MemberWriteService {
     private final MemberNicknameHistoryRepository memberNicknameHistoryRepository;
 
     // 저장
+    @Transactional
     public Member register(MemberDto.RegisterRequest requestDto) {
         Member member = Member.builder()
                 .nickname(requestDto.getNickname())
