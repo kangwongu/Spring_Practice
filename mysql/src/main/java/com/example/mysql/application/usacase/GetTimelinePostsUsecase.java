@@ -4,7 +4,9 @@ package com.example.mysql.application.usacase;
 import com.example.mysql.domain.follow.entity.Follow;
 import com.example.mysql.domain.follow.service.FollowReadService;
 import com.example.mysql.domain.post.entity.Post;
+import com.example.mysql.domain.post.entity.Timeline;
 import com.example.mysql.domain.post.service.PostReadService;
+import com.example.mysql.domain.post.service.TimelineReadService;
 import com.example.mysql.util.CursorRequest;
 import com.example.mysql.util.PageCursor;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ public class GetTimelinePostsUsecase {
 
     private final FollowReadService followReadService;
     private final PostReadService postReadService;
+    private final TimelineReadService timelineReadService;
 
     // 커서 기반 페이징으로 반환
     /*
@@ -38,10 +41,11 @@ public class GetTimelinePostsUsecase {
         조회한 timeline의 post 조회
      */
     public PageCursor<Post> executeByTimeline(Long memberId, CursorRequest cursorRequest) {
-        List<Follow> followings = followReadService.getFollowings(memberId);
-        List<Long> followingMemberIds = followings.stream()
-                .map(f -> f.getToMemberId())
+        PageCursor<Timeline> pagedTimelines = timelineReadService.getTimelines(memberId, cursorRequest);
+        List<Long> postIds = pagedTimelines.getContent().stream()
+                .map(f -> f.getPostId())
                 .collect(Collectors.toList());
-        return postReadService.getPosts(followingMemberIds, cursorRequest);
+        List<Post> posts = postReadService.getPosts(postIds);
+        return new PageCursor<>(pagedTimelines.getNextCursorRequest(), posts);
     }
 }

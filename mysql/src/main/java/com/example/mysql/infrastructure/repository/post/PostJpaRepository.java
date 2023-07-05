@@ -31,4 +31,7 @@ public interface PostJpaRepository extends JpaRepository<Post, Long> {
     Page<Post> findAllByMemberId(@Param("memberId") Long memberId,
                                  Pageable pageable);
 
+    @Query("select p from Post p " +
+            "where p.id in :ids")
+    List<Post> findAllByIds(@Param("ids") List<Long> ids);
 }

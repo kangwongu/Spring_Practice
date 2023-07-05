@@ -4,7 +4,6 @@ import com.example.mysql.domain.post.dto.PostDto;
 import com.example.mysql.domain.post.entity.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,4 +21,6 @@ public interface PostRepository {
     List<Post> findAllByLessThanIdAndInMemberIdOrderByIdDesc(Long key, List<Long> memberIds, Long size);
 
     List<Post> findAllByInMemberIdOrderByIdDesc(List<Long> memberIds, Long size);
+
+    List<Post> findAllByIds(List<Long> ids);
 }

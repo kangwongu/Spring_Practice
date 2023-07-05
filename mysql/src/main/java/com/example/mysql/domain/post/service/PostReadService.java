@@ -69,4 +69,8 @@ public class PostReadService {
                 .min()
                 .orElse(CursorRequest.NONE_KEY);
     }
+
+    public List<Post> getPosts(List<Long> ids) {
+        return postRepository.findAllByIds(ids);
+    }
 }
