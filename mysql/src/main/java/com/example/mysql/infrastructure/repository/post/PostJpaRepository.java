@@ -38,6 +38,6 @@ public interface PostJpaRepository extends JpaRepository<Post, Long> {
             "where p.id in :ids")
     List<Post> findAllByIds(@Param("ids") List<Long> ids);
 
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
+//    @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<Post> findById(Long postId);
 }
