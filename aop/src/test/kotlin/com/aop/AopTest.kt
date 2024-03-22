@@ -5,6 +5,7 @@ import com.aop.order.OrderService
 import com.aop.order.aop.AspectV1
 import com.aop.order.aop.AspectV2
 import com.aop.order.aop.AspectV3
+import com.aop.order.aop.AspectV4
 import mu.KotlinLogging
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
@@ -16,7 +17,8 @@ import org.springframework.context.annotation.Import
 @SpringBootTest
 //@Import(AspectV1::class)    // 빈으로 등록
 //@Import(AspectV2::class)    // 빈으로 등록
-@Import(AspectV3::class)    // 빈으로 등록
+//@Import(AspectV3::class)    // 빈으로 등록
+@Import(AspectV4::class)    // 빈으로 등록
 class AopTest @Autowired constructor(
     private val orderService: OrderService,
     private val orderRepository: OrderRepository,
