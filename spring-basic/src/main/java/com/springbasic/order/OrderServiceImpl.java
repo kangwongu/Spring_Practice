@@ -2,6 +2,7 @@ package com.springbasic.order;
 
 import com.springbasic.discount.DiscountPolicy;
 import com.springbasic.discount.FixDiscountPolicy;
+import com.springbasic.discount.RateDiscountPolicy;
 import com.springbasic.member.Member;
 import com.springbasic.member.MemberRepository;
 import com.springbasic.member.MemoryMemberRepository;
@@ -9,7 +10,10 @@ import com.springbasic.member.MemoryMemberRepository;
 public class OrderServiceImpl implements OrderService {
 
     private final MemberRepository memberRepository = new MemoryMemberRepository();
-    private final DiscountPolicy discountPolicy = new FixDiscountPolicy();
+    // FixDiscountPolicy -> RateDiscountPolicy
+    // OCP 위반, DIP 위반
+//    private final DiscountPolicy discountPolicy = new FixDiscountPolicy();
+    private final DiscountPolicy discountPolicy = new RateDiscountPolicy();
 
     @Override
     public Order createOrder(Long memberId, String itemName, int itemPrice) {
